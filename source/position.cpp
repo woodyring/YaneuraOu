@@ -704,8 +704,21 @@ bool Position::pseudo_legal_s(const Move m) const {
     // 打てない段に打つ歩・香・桂の指し手はそもそも生成されていない。
     // 置換表のhash衝突で、後手の指し手が先手の指し手にならないことは保証されている。
     // (先手の手番の局面と後手の手番の局面とのhash keyはbit0で区別しているので)
-
-    // ゆえに、ここではこれ以上のチェックは不要なのである。
+    // しかし、Counter Moveの手は手番に関係ないので取り違える可能性が高いため
+    // 違法手のチェックをする必要がある
+    // この違法手チェック部分はbenchコマンドで３回程度発生することが確認されている
+    switch(pr)
+    {
+      case PAWN:
+      case LANCE:
+        if ((us == BLACK && rank_of(to) == RANK_1) || (us == WHITE && rank_of(to) == RANK_9))
+          return false;
+        break;
+      case KNIGHT:
+        if ((us == BLACK && rank_of(to) < RANK_3) || (us == WHITE && rank_of(to) > RANK_7))
+          return false;
+        break;
+    }
 
   } else {
 
@@ -754,9 +767,18 @@ bool Position::pseudo_legal_s(const Move m) const {
         // 移動元と移動先がこれであるかぎり、それは桂の指し手生成によって生成されたものだから
         // これが非合法手であることはない。
 
-        if (pt == PAWN || pt == LANCE)
+        switch(pt)
+        {
+        case PAWN:
+        case LANCE:
           if ((us == BLACK && rank_of(to) == RANK_1) || (us == WHITE && rank_of(to) == RANK_9))
             return false;
+          break;
+        case KNIGHT:
+          if ((us == BLACK && rank_of(to) < RANK_3) || (us == WHITE && rank_of(to) > RANK_7))
+            return false;
+          break;
+        }
       } else {
         // 歩の不成と香の2段目への不成を禁止。
         // 大駒の不成を禁止

@@ -367,7 +367,8 @@ private:
 inline TTEntry* TranspositionTable::first_entry(const Key key) const {
 
   //:  return table + ((uint32_t)key & hashMask);
-  return table + ((uint64_t)key & hashMask);
+  static_assert(ClusterSize==4);
+  return table + ((uint64_t)(key<<2) & hashMask); // save bit0
 }
 
 

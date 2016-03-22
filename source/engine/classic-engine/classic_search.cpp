@@ -755,12 +755,14 @@ namespace YaneuraOuClassic
     // -----------------------
 
     Move bestMove = MOVE_NONE;
+    const bool InCheck = pos.checkers();
 
     // RootNodeでは1手詰め判定、ややこしくなるのでやらない。(RootMovesの入れ替え等が発生するので)
     // 置換表にhitしたときも1手詰め判定は行われていると思われるのでこの場合もはしょる。
     // depthの残りがある程度ないと、1手詰めはどうせこのあとすぐに見つけてしまうわけで1手詰めを
     // 見つけたときのリターン(見返り)が少ない。
-    if (!RootNode && !ttHit && depth > ONE_PLY)
+    // ttHitしてなくて自玉が王手がかかっていても勝ちだと判断するノードが増えてくると終盤に逆転されやすくなる
+    if (!RootNode && !ttHit && depth > ONE_PLY && !InCheck)
     {
       bestMove = pos.mate1ply();
       if (bestMove != MOVE_NONE)
@@ -783,7 +785,6 @@ namespace YaneuraOuClassic
     //  局面を評価値によって静的に評価
     // -----------------------
 
-    const bool InCheck = pos.checkers();
 
     if (InCheck)
     {

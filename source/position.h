@@ -105,6 +105,7 @@ struct StateInfo {
   Key board_key()               const { return board_long_key(); }
   Key hand_key()                const { return hand_long_key(); }
   Key exclusion_key()           const { return exclusion_long_key(); }
+  Key exclude_turn_key()        const { return long_key() >> 1; }
 
   // HASH_KEY_BITSが128のときはKey128が返るhash key,256のときはKey256
   HASH_KEY long_key()           const { return board_key_ + hand_key_; }

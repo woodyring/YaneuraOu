@@ -1280,6 +1280,7 @@ void Position::do_null_move(StateInfo& newSt) {
 
   ASSERT_LV3(!checkers());
   ASSERT_LV3(&newSt != st);
+  ASSERT_LV3(st->sumKKP != INT_MAX);
 
   // この場合、StateInfo自体は丸ごとコピーしておかないといけない。(他の初期化をしないので)
   std::memcpy(&newSt, st, sizeof(StateInfo));

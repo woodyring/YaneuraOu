@@ -11,7 +11,7 @@
 using namespace std;
 
 // eval cacheを用いるか。
-//#define USE_EHASH
+#define USE_EHASH
 
 namespace Eval
 {
@@ -177,7 +177,7 @@ namespace Eval
     e.sumKKP = Value(sumKKP);
     e.sumBKPP = Value(sumBKPP);
     e.sumWKPP = Value(sumWKPP);
-    e.key = info.key();
+    e.key = info.exclude_turn_key();
     ehash[e.key & (EHASH_SIZE - 1)] = e;
 
 #endif
@@ -204,7 +204,7 @@ namespace Eval
     }
 
 #ifdef USE_EHASH
-    HASH_KEY key = st->key();
+    HASH_KEY key = st->exclude_turn_key();
     {
       auto e = ehash[key & (EHASH_SIZE - 1)];
       if (e.key == key)
@@ -228,7 +228,7 @@ namespace Eval
     if (prev->sumKKP == INT_MAX)
     {
 #ifdef USE_EHASH
-      HASH_KEY key2 = prev->key();
+      HASH_KEY key2 = prev->exclude_turn_key();
       auto e = ehash[key2 & (EHASH_SIZE - 1)];
       if (e.key == key2)
       {

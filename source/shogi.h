@@ -7,7 +7,7 @@
 //
 
 // 思考エンジンのバージョンとしてUSIプロトコルの"usi"コマンドに応答するときの文字列
-#define ENGINE_VERSION "2.78"
+#define ENGINE_VERSION "2.78+ehash"
 
 // --------------------
 // コンパイル時の設定
